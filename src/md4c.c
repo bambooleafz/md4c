@@ -3008,7 +3008,7 @@ md_collect_marks(MD_CTX* ctx, const MD_LINE* lines, MD_SIZE n_lines, int table_m
     MD_MARK* mark;
     OFF codespan_last_potential_closers[CODESPAN_MARK_MAXLEN] = { 0 };
     int codespan_scanned_till_paragraph_end = FALSE;
-	static uint8_t __icl_md_latex_mark = 0;		// a nasty but working helper mark
+	static uint8_t __icl_md_latex_mark = 1;		// a nasty but working helper mark
 
     for(line_index = 0; line_index < n_lines; line_index++) {
         const MD_LINE* line = &lines[line_index];
