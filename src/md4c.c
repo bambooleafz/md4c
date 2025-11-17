@@ -3008,6 +3008,7 @@ md_collect_marks(MD_CTX* ctx, const MD_LINE* lines, MD_SIZE n_lines, int table_m
     MD_MARK* mark;
     OFF codespan_last_potential_closers[CODESPAN_MARK_MAXLEN] = { 0 };
     int codespan_scanned_till_paragraph_end = FALSE;
+	static uint8_t __icl_md_latex_mark = 0;		// a nasty but working helper mark
 
     for(line_index = 0; line_index < n_lines; line_index++) {
         const MD_LINE* line = &lines[line_index];
@@ -3303,12 +3304,16 @@ md_collect_marks(MD_CTX* ctx, const MD_LINE* lines, MD_SIZE n_lines, int table_m
                     tmp++;
 
                 if(tmp - off <= 2) {
-                    unsigned flags = MD_MARK_POTENTIAL_OPENER | MD_MARK_POTENTIAL_CLOSER;
+                    // unsigned flags = MD_MARK_POTENTIAL_OPENER | MD_MARK_POTENTIAL_CLOSER;
 
-                    if(off > line->beg  &&  !ISUNICODEWHITESPACEBEFORE(off)  &&  !ISUNICODEPUNCTBEFORE(off))
-                        flags &= ~MD_MARK_POTENTIAL_OPENER;
-                    if(tmp < line->end  &&  !ISUNICODEWHITESPACE(tmp)  &&  !ISUNICODEPUNCT(tmp))
-                        flags &= ~MD_MARK_POTENTIAL_CLOSER;
+                    // if(off > line->beg  &&  !ISUNICODEWHITESPACEBEFORE(off)  &&  !ISUNICODEPUNCTBEFORE(off))
+                    //     flags &= ~MD_MARK_POTENTIAL_OPENER;
+                    // if(tmp < line->end  &&  !ISUNICODEWHITESPACE(tmp)  &&  !ISUNICODEPUNCT(tmp))
+                    //     flags &= ~MD_MARK_POTENTIAL_CLOSER;
+
+					// it's nasty, but works
+					unsigned flags = __icl_md_latex_mark ? MD_MARK_POTENTIAL_OPENER : MD_MARK_POTENTIAL_CLOSER;
+					__icl_md_latex_mark = !__icl_md_latex_mark;
                     if(flags != 0)
                         ADD_MARK(ch, off, tmp, flags);
                 }
